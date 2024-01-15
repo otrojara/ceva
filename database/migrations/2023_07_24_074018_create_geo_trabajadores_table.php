@@ -16,15 +16,17 @@ return new class extends Migration
             $table->string('nombres')->nullable();
             $table->string('apellidos')->nullable();
             $table->string('rut')->nullable();
+            $table->string('cod_Cargo')->nullable();
             $table->string('grupo')->nullable();
             $table->date('fecha')->nullable();
             $table->string('email')->nullable();
             $table->string('turno')->nullable();
             $table->string('cargo')->nullable();
-            $table->string('inicio_contrato')->nullable();  
-            $table->string('fin_contrato')->nullable();  
-            $table->string('empresa')->nullable();  
-            $table->string('enabled')->nullable();  
+            $table->string('ART22')->nullable();
+            $table->string('inicio_contrato')->nullable();
+            $table->string('fin_contrato')->nullable();
+            $table->string('empresa')->nullable();
+            $table->string('enabled')->nullable();
             $table->timestamps();
         });
     }

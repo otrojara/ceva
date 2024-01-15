@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->string('shiftdisplay')->nullable();
             $table->string('delay')->nullable();
+            $table->string('assignedextratime')->nullable();
             $table->string('workedhours')->nullable();
             $table->string('absent')->nullable();
             $table->string('holiday')->nullable();
@@ -33,7 +34,7 @@ return new class extends Migration
             $table->string('to_star')->nullable();
             $table->string('to_ends')->nullable();
             $table->string('to_timeofftypedescription')->nullable();
-            
+
 
             $table->timestamps();
         });

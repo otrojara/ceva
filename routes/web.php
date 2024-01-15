@@ -55,9 +55,9 @@ Route::get('/repgeoasistencia', function () {
 
     // $tipoturno = GeoTurno::get();
 
-    
+
     // foreach ($tipoturno as $tp) {
-        
+
     //             RepGeoAsistencia::where('turno',$tp->horario)
     //             ->update(['tipo_turno' => $tp->turno]);
 
@@ -66,10 +66,10 @@ Route::get('/repgeoasistencia', function () {
 
     DB::statement("update rep_geoasistencia SET tipo_turno = 'PART TIME' WHERE GRUPO LIKE '%PART TIME%'");
     DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE ART22 = 'SI'");
-  
 
-    
-    
+
+
+
 
 
     //RepGeoAsistencia::where('fecha','>',$fecha)->update(['presente' => 1]);
@@ -88,7 +88,7 @@ Route::get('/repgeoasistencia', function () {
    DB::statement("update rep_geoasistencia SET ATRASO = (CAST(SUBSTRING(ATRASO, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(ATRASO, 4, 5) AS UNSIGNED)");
    DB::statement("update rep_geoasistencia SET horas_extras = (CAST(SUBSTRING(horas_extras, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(horas_extras, 4, 5) AS UNSIGNED)");
    DB::statement("update rep_geoasistencia SET ATRASO = 0 where  atraso <= 15");
-  
+
    //EN MINUTOS Y HORAS ATRASOS Y HHEE
    //DB::statement("update rep_geoasistencia SET horas_extras = 0 WHERE atraso <= 15");
 
@@ -118,7 +118,7 @@ Route::get('/proforma', function () {
 
     DB::statement("CALL proforma();");
      dd('LISTO');
-    
+
     });
 
 
@@ -160,7 +160,7 @@ Route::get('/errores', function () {
         ->where('fecha',$fecha)
         ->update(['sin_turno' => 1]);
     }
-    
+
     $icontrato = GeoTrabajadores::select('rut','nombres','apellidos','bu')
     ->where('inicio_contrato', '--')->WHERE('enabled',1)->where('fecha',$fecha)->orderBy('bu', 'DESC')->get();
     $icontratocount = count($icontrato) ;
@@ -182,7 +182,7 @@ Route::get('/errores', function () {
         ->update(['sin_fin_contrato' => 1]);
     }
 
-    
+
 
     $s = GeoAsistencia::select('rut')
     ->whereNotNull('entrada_fecha')
@@ -225,8 +225,8 @@ Route::get('/prueba', function () {
     RepGeoAsistencia::truncate();
 
 
-    $results = DB::select("select cal.fecha as calfecha,cal.dia,tr.* 
-    FROM sis_calendario as cal ,geo_trabajadores as tr 
+    $results = DB::select("select cal.fecha as calfecha,cal.dia,tr.*
+    FROM sis_calendario as cal ,geo_trabajadores as tr
     WHERE tr.fecha='2024-01-09' and cal.fecha BETWEEN '2024-01-01' and '2024-01-07' ");
     //WHERE tr.fecha='2023-11-21' and cal.fecha BETWEEN '2023-10-01' and '2023-10-31'");
     //    WHERE tr.fecha='2023-11-30' and cal.fecha >= '2023-11-01' ");
@@ -252,26 +252,26 @@ Route::get('/prueba', function () {
         ]);
     }
 
-    
+
 
 
     $info = DB::select("select tra.rut AS rutra,tra.*,asi.*
-    FROM rep_geoasistencia as tra 
-    LEFT JOIN geo_asistencia as asi ON asi.rut=tra.rut AND asi.date=tra.fecha 
+    FROM rep_geoasistencia as tra
+    LEFT JOIN geo_asistencia as asi ON asi.rut=tra.rut AND asi.date=tra.fecha
     ");
-   
-   
 
-    
-    
+
+
+
+
 
     RepGeoAsistencia::truncate();
 
     foreach ($info as $rep) {
 
 
-        
-    
+
+
        // echo $file_extension;
 
 
@@ -313,9 +313,9 @@ Route::get('/prueba', function () {
 
 
 // 9 min
- 
-  
-    
+
+
+
 
 
 
@@ -336,25 +336,25 @@ Route::get('/prueba', function () {
     ->where('to_ends','>=',$fecha)
     ->get();
 
-   
+
 
     foreach ($licencias as $l) {
 
-    
+
 
         RepGeoAsistencia::where('rut',$l->rut)
-        ->where('fecha','>=',Carbon::parse($l->to_star)->format('Y-m-d')) 
-        ->where('fecha','<=',Carbon::parse($l->to_ends)->format('Y-m-d')) 
+        ->where('fecha','>=',Carbon::parse($l->to_star)->format('Y-m-d'))
+        ->where('fecha','<=',Carbon::parse($l->to_ends)->format('Y-m-d'))
         ->update(['presente' => 0,
         'permiso' => 'Licencia Médica Estándar',
         'to_star' => $l->to_star,
         'to_end' => $l->to_ends
     ]);
-        
+
     }
 
    // dd($licencias);
-   
+
 // 5 min
    // dd($licencias);
 
@@ -368,8 +368,8 @@ Route::get('/prueba', function () {
 
 //     foreach ($turfut as $tf) {
 
-        
-        
+
+
 //               //  dd($turno);
 //                 RepGeoAsistencia::where('rut',$tf->rut)
 //                 ->whereNull('turno')
@@ -378,8 +378,8 @@ Route::get('/prueba', function () {
 
 //     }
 
-   
-  
+
+
 
     ///////////////////
 
@@ -398,9 +398,9 @@ Route::get('/prueba', function () {
     //             ->where('date','<',$inf->fecha)
     //             ->orderBy('date', 'DESC')
     //             ->first();
-                
+
     //         if (empty($turno->shiftdisplay)) {
-               
+
     //         } else {
     //             RepGeoAsistencia::where('fecha','=',$inf->fecha)
     //             ->where('rut',$inf->rut)
@@ -414,9 +414,9 @@ Route::get('/prueba', function () {
 
     // $tipoturno = GeoTurno::get();
 
-    
+
     // foreach ($tipoturno as $tp) {
-        
+
     //             RepGeoAsistencia::where('turno',$tp->horario)
     //             ->update(['tipo_turno' => $tp->turno]);
 
@@ -429,7 +429,7 @@ Route::get('/prueba', function () {
 
     DB::statement("update rep_geoasistencia SET tipo_turno = 'PART TIME' WHERE GRUPO LIKE '%PART TIME%'");
     DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE ART22 = 'SI'");
-  
+
     //RepGeoAsistencia::where('fecha','>',$fecha)->update(['presente' => 1]);
     RepGeoAsistencia::where('ausente','True')->update(['presente' => 0]);
     RepGeoAsistencia::where('ausente',null)->where('fecha','<=',$fecha)->update(['presente' => 0]);
@@ -446,7 +446,7 @@ Route::get('/prueba', function () {
    DB::statement("update rep_geoasistencia SET ATRASO = (CAST(SUBSTRING(ATRASO, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(ATRASO, 4, 5) AS UNSIGNED)");
    DB::statement("update rep_geoasistencia SET horas_extras = (CAST(SUBSTRING(horas_extras, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(horas_extras, 4, 5) AS UNSIGNED)");
    DB::statement("update rep_geoasistencia SET ATRASO = 0 where  atraso <= 15");
-  
+
    //EN MINUTOS Y HORAS ATRASOS Y HHEE
    //DB::statement("update rep_geoasistencia SET horas_extras = 0 WHERE atraso <= 15");
 
@@ -471,9 +471,9 @@ Route::get('/prueba', function () {
 
     DB::statement("CALL proforma();");
 
-    
+
     dd('listo');
-    
+
 
     //dd($lic);
 
@@ -488,7 +488,7 @@ Route::get('/api3', function () {
 
 
             $xcurl = curl_init();
-        
+
             curl_setopt_array($xcurl, [
                 CURLOPT_URL => "https://customerapi.geovictoria.com/api/v1/AttendanceBook?=",
                 CURLOPT_RETURNTRANSFER => true,
@@ -503,16 +503,16 @@ Route::get('/api3', function () {
                 "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJTQmVSUHBRcy0wMl9JSm9sbml0dldPaVB0LWhXSmN4RzBUYWNneVc2MExLVkdON1VnU1dDaDk2d0xSYkd6dmpPSXNkUGNKX1hEam1oc2pYNnVUT0gyMkRyeXVwdVdCT1JMUVBQRkRxVGh0MldWRmJiT0JJbHRzOUdXTnNRQ0pnTCIsImlhdCI6MTY5MDIxODA0NywibmJmIjoxNjkwMjE4MDQ3LCJleHAiOjI1MzQwMjMwMDgwMCwiaXNzIjoiR2VvVmljdG9yaWEgLSBDdXN0b21lciBBUEkifQ.SHKl51SDsjKS_zkQklSWeOntywxeYgkIc7qsbV_1yV0"
                 ],
             ]);
-                    
+
             $xresponse = curl_exec($xcurl);
             $err = curl_error($xcurl);
 
             $trab = json_decode($xresponse);
 
-            
 
 
-       
+
+
 
         if(empty($trab->Users[0]->PlannedInterval)) {
 
@@ -522,7 +522,7 @@ Route::get('/api3', function () {
             foreach($trab->Users[0]->PlannedInterval as $asistencia)
             {
 
-                
+
 
                 if (empty($asistencia->Date)) {
                     $fecha = '1990-01-01';
@@ -530,7 +530,7 @@ Route::get('/api3', function () {
                     $fecha = Carbon::parse($asistencia->Date)->format('Y-m-d') ;
                 }
 
-               
+
 
                 foreach($asistencia->Punches as $a)
                 {
@@ -542,11 +542,11 @@ Route::get('/api3', function () {
 
 
 
-                   
 
-                    
-                    
-               
+
+
+
+
                     GeoAsistencia::create([
                         'rut' => '185060861',
                         'date' => Carbon::parse($a->Date)->format('Y-m-d H:i:s'),
@@ -556,7 +556,7 @@ Route::get('/api3', function () {
                         'shiftpunchtype' => $a->ShiftPunchType,
                         'fecha' => $fecha
                     ]);
-                    
+
                 }
 
                 GeoAsistenciaAtrasos::create([
@@ -570,14 +570,14 @@ Route::get('/api3', function () {
                     'nonworkedhours' => $asistencia->NonWorkedHours
                 ]);
 
-                
+
 
 
             }
         }
-    
 
-        
+
+
 
 });
 
@@ -589,13 +589,13 @@ Route::get('/api2', function () {
     //$fecha = Carbon::parse(Carbon::now()->subDays(2))->format('Y-m-d');
     $fecha = '2024-01-08';
     GeoAsistencia::where('date','>=', '2024-01-08')->delete();
-    
-    $FECHAINI = '2024-01-08'; 
+
+    $FECHAINI = '2024-01-08';
     $FECHAINI = str_replace("-","",$FECHAINI);
     $FECHAINI = $FECHAINI . '000000';
-    
+
     $FECHAMAN = Carbon::now();
-    $FECHAMAN = $FECHAMAN->toDateString(); 
+    $FECHAMAN = $FECHAMAN->toDateString();
     $FECHAMAN = str_replace("-","",$FECHAMAN);
     $FECHAMAN = $FECHAMAN . '000000';
 
@@ -604,9 +604,9 @@ Route::get('/api2', function () {
     ->where('fecha',Carbon::parse(Carbon::now())->format('Y-m-d'))
     //->whereIN('rut', array('206488778','262163695','260072153','265735800','159810658','267685142','133527745','167868215','205801162','155069856','118595637','109026468','188507646','192855020','171286476','266328427','151887902','198876356','199117556','194798296','197676272','212308676','192340756','126396570'))
     ->get();
-    
 
-    
+
+
 
    // dd($FECHAMAN);
 
@@ -618,7 +618,7 @@ Route::get('/api2', function () {
         //dd($trabajador);
 
             $xcurl = curl_init();
-        
+
             curl_setopt_array($xcurl, [
                 CURLOPT_URL => "https://customerapi.geovictoria.com/api/v1/AttendanceBook?=",
                 CURLOPT_RETURNTRANSFER => true,
@@ -634,15 +634,15 @@ Route::get('/api2', function () {
                 "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJTQmVSUHBRcy0wMl9JSm9sbml0dldPaVB0LWhXSmN4RzBUYWNneVc2MExLVkdON1VnU1dDaDk2d0xSYkd6dmpPSXNkUGNKX1hEam1oc2pYNnVUT0gyMkRyeXVwdVdCT1JMUVBQRkRxVGh0MldWRmJiT0JJbHRzOUdXTnNRQ0pnTCIsImlhdCI6MTY5MDIxODA0NywibmJmIjoxNjkwMjE4MDQ3LCJleHAiOjI1MzQwMjMwMDgwMCwiaXNzIjoiR2VvVmljdG9yaWEgLSBDdXN0b21lciBBUEkifQ.SHKl51SDsjKS_zkQklSWeOntywxeYgkIc7qsbV_1yV0"
                 ],
             ]);
-                    
+
             $xresponse = curl_exec($xcurl);
             $err = curl_error($xcurl);
 
             $trab = json_decode($xresponse);
 
 
-            
-                
+
+
            //dd($trab);
 
 
@@ -653,11 +653,11 @@ Route::get('/api2', function () {
 
             foreach($trab->Users[0]->PlannedInterval as $asistencia)
             {
-                
 
 
-                
-                
+
+
+
 
 
                 $entrada_fecha = NULL;
@@ -672,7 +672,7 @@ Route::get('/api2', function () {
                 $to_timeofftypedescription = NULL;
 
                     if(empty($asistencia->Punches)) {
-                        
+
                     }
                     else{
 
@@ -684,19 +684,19 @@ Route::get('/api2', function () {
                                 $grupo = $a->GroupDescription;
                             }
 
-                    
+
 
                             if($a->ShiftPunchType == "Entrada") {
                                 $entrada_fecha = Carbon::parse($a->Date)->format('Y-m-d H:i:s') ;
                                 $entrada_origin = $a->Origin;
                                 $entrada_groupdescription = $grupo;
-                        
+
                             }
                             elseif($a->ShiftPunchType == "Salida"){
                                 $salida_fecha = Carbon::parse($a->Date)->format('Y-m-d H:i:s') ;
                                 $salida_origin = $a->Origin;
                                 $salida_groupdescription = $grupo;
-                                
+
                             }
 
                         }
@@ -704,14 +704,14 @@ Route::get('/api2', function () {
                     }
 
                     if(empty($asistencia->TimeOffs)) {
-                        
+
                     }
                     else{
 
                         if(!empty($asistencia->TimeOffs[0]->Description)) {
                             $to_description = $asistencia->TimeOffs[0]->Description;
                         }
-                        
+
                         $to_star =  Carbon::parse($asistencia->TimeOffs[0]->Starts)->format('Y-m-d H:i:s');
                         $to_ends = Carbon::parse($asistencia->TimeOffs[0]->Ends)->format('Y-m-d H:i:s') ;
                         $to_timeofftypedescription = $asistencia->TimeOffs[0]->TimeOffTypeDescription;
@@ -720,18 +720,18 @@ Route::get('/api2', function () {
 
 
                    // dd($asistencia->AssignedExtraTime);
-                    
+
                     //$ext = $asistencia->AssignedExtraTime;
                     if( key($asistencia->AssignedExtraTime) == null){
                         $ext = Null;
                     }else{
-                        
+
 
                        // dd($asistencia->AssignedExtraTime);
                         $ext = $asistencia->AssignedExtraTime;
                         $ext = $ext->{key($asistencia->AssignedExtraTime)};
                     }
-     
+
                     // if(empty($asistencia->AssignedExtraTime)){
                     //     $ext = Null;
                     // }else{
@@ -739,7 +739,7 @@ Route::get('/api2', function () {
                     //     //dd($asistencia->AssignedExtraTime);
                     //     $ext = $ext->{key($asistencia->AssignedExtraTime)};
                     // }
-                    
+
 
                     //dd( $ext);
                     //dd($ext);
@@ -767,7 +767,7 @@ Route::get('/api2', function () {
                         'to_star' => $to_star,
                         'to_ends' => $to_ends,
                         'to_timeofftypedescription' => $to_timeofftypedescription
-                        
+
                     ]);
 
 
@@ -793,10 +793,10 @@ Route::get('/api2', function () {
          ->where('fecha',$fecha)
          ->update(['turno' => $results[0]->shiftdisplay]);
     }
-   
+
     }
 
-        
+
 
 });
 
@@ -810,20 +810,20 @@ Route::get('/api2', function () {
 Route::get('/api', function () {
 
     $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
-    
-    GeoTrabajadores::select('rut')->where('fecha', $fecha)->delete();   
+
+    GeoTrabajadores::select('rut')->where('fecha', $fecha)->delete();
 
     $dateHOY = Carbon::now();
-    $FECHAINI =  $dateHOY->toDateString(); 
+    $FECHAINI =  $dateHOY->toDateString();
     $FECHAINI = str_replace("-","",$FECHAINI);
     $FECHAINI = $FECHAINI . '000000';
-    
+
     $dateINI = Carbon::now();
     $FECHAMAN = $dateINI->addDays(1);
-    $FECHAMAN =  $FECHAMAN->toDateString(); 
+    $FECHAMAN =  $FECHAMAN->toDateString();
     $FECHAMAN = str_replace("-","",$FECHAMAN);
     $FECHAMAN = $FECHAMAN . '000000';
-    
+
     $curl = curl_init();
 
     curl_setopt_array($curl, [
@@ -847,6 +847,7 @@ Route::get('/api', function () {
 
     $info = json_decode($response);
 
+
     foreach($info as $RES)
     {
         $contrato = substr($RES->ContractDate, 0,4).'-'.substr($RES->ContractDate, 4,2).'-'.substr($RES->ContractDate, 6,2);
@@ -856,11 +857,11 @@ Route::get('/api', function () {
         $art22 = NULL;
         if ($RES->Custom2 == 'Art.22') {
             $art22 = 'SI';
-        } 
+        }
 
         $tmp = explode(' ', $RES->GroupDescription);
         $empresa = end($tmp);
-        
+
 
 
         $xcurl = curl_init();
@@ -879,15 +880,15 @@ Route::get('/api', function () {
                 'empresa' => $empresa,
                 'enabled' => $RES->Enabled
             ]);
-    } 
+    }
 
 
-   // dd('listo');
-    
-    //GeoTrabajadores::select('rut')->where('fecha', $fecha)->delete(); 
-    
-   // GeoTrabajadores::delete(); 
- 
+   //dd('listo');
+
+    //GeoTrabajadores::select('rut')->where('fecha', $fecha)->delete();
+
+   // GeoTrabajadores::delete();
+
     //$grupos = GeoGrupo::select('nivel_tres')->get();
 
     $grupos = GeoGrupo::select('geo_grupos.nivel_tres')
@@ -900,12 +901,15 @@ Route::get('/api', function () {
     GeoTrabajadores::select('rut')
     ->where('fecha', $fecha)
     ->whereNotIn('grupo', $grupos)
-    ->delete(); 
+    ->delete();
 
 
 
     /////////////////////////////////////////////
-
+    ///
+    ///
+    ///
+    dd('listo');
     $trab = GeoTrabajadores::select('rut','grupo')->where('fecha', $fecha)->get();
 
     foreach ($trab as $t) {
@@ -921,6 +925,8 @@ Route::get('/api', function () {
 
         GeoTrabajadores::where('rut', $t->rut)->update(['bu' => $bu->nombre,'cod_bu' => $bu->codigo ]);
     }
+
+
 
 
     $trabc = GeoTrabajadores::select('rut','cod_cargo')->where('fecha', $fecha)->whereNotNull('cod_cargo')->get();
@@ -939,8 +945,8 @@ Route::get('/api', function () {
     DB::statement("delete FROM geo_trabajadores WHERE RUT = '88241193'");
 
 
-    
-    
+
+
 
 });
 
@@ -969,7 +975,7 @@ Route::get('/pdfanalista', [AsistenciaController::class, 'analistaPDF'])->name('
 
 
 
-    
+
 // MODULO: CARATULA INFORME DE COSTO
 Route::post('/ImportLibro', [ProformaController::class, 'cargalibro'])->name('ImportLibro');
 
