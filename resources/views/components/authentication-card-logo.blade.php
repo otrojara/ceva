@@ -1,0 +1,1 @@
+<img src="{{asset('vendor/adminlte/dist/img/ceva.png')}}" alt="" style="width:150px;">
