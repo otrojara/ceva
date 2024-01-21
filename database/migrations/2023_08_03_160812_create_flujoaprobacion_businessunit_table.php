@@ -35,5 +35,7 @@ return new class extends Migration
         Schema::dropIfExists('business_unit_user');
         Schema::dropIfExists('flujo_aprobacions');
         Schema::dropIfExists('business_units');
+        Schema::dropIfExists('sis_comunas');
+        Schema::dropIfExists('sis_regions');
     }
 };
