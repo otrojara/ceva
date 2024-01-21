@@ -20,10 +20,14 @@ return new class extends Migration
             $table->string('estado')->nullable();
             $table->string('grupo')->nullable();
             $table->string('bu')->nullable();
+            $table->string('cod_bu')->nullable();
             $table->string('cod_cargo')->nullable();
             $table->string('cargo')->nullable();
             $table->string('categoria')->nullable();
+            $table->string('art22')->nullable();
+            $table->string('empresa')->nullable();
             $table->string('turno')->nullable();
+            $table->string('tipo_turno')->nullable();
             $table->string('inicio_contrato')->nullable();
             $table->string('termino_contrato')->nullable();
             $table->string('type')->nullable();
@@ -41,6 +45,14 @@ return new class extends Migration
             $table->string('permiso')->nullable();
             $table->string('to_star')->nullable();
             $table->string('to_end')->nullable();
+            $table->integer('presente')->nullable();
+            $table->integer('libre')->nullable();
+            $table->integer('licencia')->nullable();
+            $table->integer('cumpleanio')->nullable();
+            $table->integer('administrativo')->nullable();
+            $table->integer('vacaciones')->nullable();
+            $table->integer('permiso_con_goce')->nullable();
+            $table->integer('no_presente')->nullable();
             $table->timestamps();
         });
     }

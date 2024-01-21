@@ -587,10 +587,10 @@ Route::get('/api2', function () {
 
 
     //$fecha = Carbon::parse(Carbon::now()->subDays(2))->format('Y-m-d');
-    $fecha = '2024-01-08';
-    GeoAsistencia::where('date','>=', '2024-01-08')->delete();
+    $fecha = '2024-01-18';
+    GeoAsistencia::where('date','>=', '2024-01-18')->delete();
 
-    $FECHAINI = '2024-01-08';
+    $FECHAINI = '2024-01-18';
     $FECHAINI = str_replace("-","",$FECHAINI);
     $FECHAINI = $FECHAINI . '000000';
 
@@ -627,7 +627,7 @@ Route::get('/api2', function () {
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => " {\"StartDate\": \"20240101000000\",\n\"EndDate\": \"20240107000000\",\n\"UserIds\": \"$trabajador->rut\"}",
+                CURLOPT_POSTFIELDS => " {\"StartDate\": \"20240101000000\",\n\"EndDate\": \"20240114000000\",\n\"UserIds\": \"$trabajador->rut\"}",
                //CURLOPT_POSTFIELDS => " {\"StartDate\": \"20230909000000\",\n\"EndDate\": \"20230909000000\",\n\"UserIds\": \"271862156\"}",
                 CURLOPT_HTTPHEADER => [
                 "Content-Type: application/json",
