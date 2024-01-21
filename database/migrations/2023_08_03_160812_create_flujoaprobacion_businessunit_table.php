@@ -33,6 +33,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('flujo_aprobacion_business_unit');
         Schema::dropIfExists('business_unit_user');
+        Schema::dropIfExists('users');
         Schema::dropIfExists('flujo_aprobacions');
         Schema::dropIfExists('business_units');
         Schema::dropIfExists('sis_comunas');
