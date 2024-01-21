@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('flujo_aprobacions', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            
+
             $table->timestamps();
         });
     }
@@ -24,6 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('flujo_aprobacions');
+
+
     }
 };

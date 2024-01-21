@@ -23,6 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sis_region');
+        Schema::dropIfExists('sis_comunas');
+        Schema::dropIfExists('sis_regions');
     }
 };

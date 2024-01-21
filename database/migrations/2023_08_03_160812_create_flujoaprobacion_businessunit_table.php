@@ -31,6 +31,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('create_flujoaprobacion_businessunit_tables');
+        Schema::dropIfExists('flujo_aprobacion_business_unit');
+        Schema::dropIfExists('business_unit_user');
+        Schema::dropIfExists('flujo_aprobacions');
+        Schema::dropIfExists('business_units');
     }
 };
