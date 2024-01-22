@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BuController;
 use App\Http\Controllers\Areas\RecursosHumanos\AsistenciaController;
 use App\Http\Controllers\Api\MonedaController;
+use App\Http\Controllers\Api\ApiGeoController;
 use App\Models\GeoTrabajadores;
 use App\Models\GeoAsistencia;
 use App\Http\Controllers\Admin\HomeController;
@@ -30,6 +31,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Jobs\ConsumeApiGeoVictoria;
+use GuzzleHttp\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +51,14 @@ use Illuminate\Support\Facades\Mail;
 
 Route::get('/', [HomeController::class ,'index'])->name('home');
 
+Route::get('/procesar', [ApiGeoController::class, 'processTrabajadores']);
+
+
+
+
 Route::get('/repgeoasistencia', function () {
+
+    dd(Carbon::now());
 
 
     $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
@@ -581,7 +591,147 @@ Route::get('/api3', function () {
 
 });
 
+Route::get('/pruebapi', function () {
+    $client = new Client([
+        'base_uri' => 'https://customerapi.geovictoria.com/api/v1/',
+    ]);
 
+    $response = $client->request('POST', 'AttendanceBook', [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Authorization' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJTQmVSUHBRcy0wMl9JSm9sbml0dldPaVB0LWhXSmN4RzBUYWNneVc2MExLVkdON1VnU1dDaDk2d0xSYkd6dmpPSXNkUGNKX1hEam1oc2pYNnVUT0gyMkRyeXVwdVdCT1JMUVBQRkRxVGh0MldWRmJiT0JJbHRzOUdXTnNRQ0pnTCIsImlhdCI6MTY5MDIxODA0NywibmJmIjoxNjkwMjE4MDQ3LCJleHAiOjI1MzQwMjMwMDgwMCwiaXNzIjoiR2VvVmljdG9yaWEgLSBDdXN0b21lciBBUEkifQ.SHKl51SDsjKS_zkQklSWeOntywxeYgkIc7qsbV_1yV0',
+        ],
+        'json' => [
+            'StartDate' => '20240101000000',
+            'EndDate' => '20240114000000',
+            'UserIds' => '167868215',
+        ],
+    ]);
+
+    $trab = json_decode($response->getBody()->getContents());
+
+
+    if(empty($trab->Users[0]->PlannedInterval)) {
+
+    }else{
+
+        foreach($trab->Users[0]->PlannedInterval as $asistencia)
+        {
+
+            $entrada_fecha = NULL;
+            $entrada_origin = NULL;
+            $entrada_groupdescription = NULL;
+            $salida_fecha = NULL;
+            $salida_origin = NULL;
+            $salida_groupdescription = NULL;
+            $to_description = NULL;
+            $to_star = NULL;
+            $to_ends = NULL;
+            $to_timeofftypedescription = NULL;
+
+            if(empty($asistencia->Punches)) {
+
+            }
+            else{
+
+                foreach($asistencia->Punches as $a){
+
+                    if (empty($a->GroupDescription)) {
+                        $grupo = '--';
+                    }else{
+                        $grupo = $a->GroupDescription;
+                    }
+
+
+
+                    if($a->ShiftPunchType == "Entrada") {
+                        $entrada_fecha = Carbon::parse($a->Date)->format('Y-m-d H:i:s') ;
+                        $entrada_origin = $a->Origin;
+                        $entrada_groupdescription = $grupo;
+
+                    }
+                    elseif($a->ShiftPunchType == "Salida"){
+                        $salida_fecha = Carbon::parse($a->Date)->format('Y-m-d H:i:s') ;
+                        $salida_origin = $a->Origin;
+                        $salida_groupdescription = $grupo;
+
+                    }
+
+                }
+
+            }
+
+            if(empty($asistencia->TimeOffs)) {
+
+            }
+            else{
+
+                if(!empty($asistencia->TimeOffs[0]->Description)) {
+                    $to_description = $asistencia->TimeOffs[0]->Description;
+                }
+
+                $to_star =  Carbon::parse($asistencia->TimeOffs[0]->Starts)->format('Y-m-d H:i:s');
+                $to_ends = Carbon::parse($asistencia->TimeOffs[0]->Ends)->format('Y-m-d H:i:s') ;
+                $to_timeofftypedescription = $asistencia->TimeOffs[0]->TimeOffTypeDescription;
+
+            }
+
+
+            // dd($asistencia->AssignedExtraTime);
+
+            //$ext = $asistencia->AssignedExtraTime;
+            if( key($asistencia->AssignedExtraTime) == null){
+                $ext = Null;
+            }else{
+
+
+                // dd($asistencia->AssignedExtraTime);
+                $ext = $asistencia->AssignedExtraTime;
+                $ext = $ext->{key($asistencia->AssignedExtraTime)};
+            }
+
+            // if(empty($asistencia->AssignedExtraTime)){
+            //     $ext = Null;
+            // }else{
+            //     $ext = $asistencia->AssignedExtraTime;
+            //     //dd($asistencia->AssignedExtraTime);
+            //     $ext = $ext->{key($asistencia->AssignedExtraTime)};
+            // }
+
+
+            //dd( $ext);
+            //dd($ext);
+
+
+            GeoAsistencia::create([
+                'rut' => $trab->Users[0]->Identifier,
+                'date' => Carbon::parse($asistencia->Date)->format('Y-m-d'),
+                'entrada_fecha' =>$entrada_fecha ,
+                'entrada_origin' => $entrada_origin,
+                'entrada_groupdescription' => $entrada_groupdescription,
+                'salida_fecha' => $salida_fecha,
+                'salida_origin' => $salida_origin,
+                'salida_groupdescription' => $salida_groupdescription,
+                'type' => $asistencia->Shifts[0]->Type,
+                'shiftdisplay' => $asistencia->Shifts[0]->ShiftDisplay,
+                'delay' => $asistencia->Delay,
+                'assignedextratime' => $ext,
+                'workedhours' => $asistencia->WorkedHours,
+                'absent' => $asistencia->Absent,
+                'holiday' => $asistencia->Holiday,
+                'worked' => $asistencia->Worked,
+                'nonworkedhours' => $asistencia->NonWorkedHours,
+                'to_description' => $to_description,
+                'to_star' => $to_star,
+                'to_ends' => $to_ends,
+                'to_timeofftypedescription' => $to_timeofftypedescription
+
+            ]);
+
+
+        }
+    }
+});
 
 Route::get('/api2', function () {
 
@@ -647,7 +797,6 @@ Route::get('/api2', function () {
 
 
         if(empty($trab->Users[0]->PlannedInterval)) {
-
 
         }else{
 
@@ -896,12 +1045,12 @@ Route::get('/api', function () {
     ->get();
 
 
-
-
     GeoTrabajadores::select('rut')
     ->where('fecha', $fecha)
     ->whereNotIn('grupo', $grupos)
     ->delete();
+
+
 
 
 
@@ -927,7 +1076,7 @@ Route::get('/api', function () {
     }
 
 
-
+////////////
 
     $trabc = GeoTrabajadores::select('rut','cod_cargo')->where('fecha', $fecha)->whereNotNull('cod_cargo')->get();
 

@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Http\Controllers\Api\ApiGeoController;
+use App\Jobs\ProcessTrabajadoresJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -12,7 +14,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-         $schedule->command('moneda:create')->everyMinute();
+         //$schedule->command('moneda:create')->everyMinute();
+         $schedule->command('proceso:trabajadores')->dailyAt('19:20');
+        //$schedule->call([ApiGeoController::class, 'processTrabajadores'])->dailyAt('01:00');
     }
 
     /**

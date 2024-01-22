@@ -45,4 +45,5 @@ class GeoAsistencia extends Model
     // {
     //     return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
     // }
+
 }
