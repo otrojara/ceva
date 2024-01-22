@@ -585,7 +585,7 @@ Route::get('/api3', function () {
 
 Route::get('/api2', function () {
 
-
+    set_time_limit(1800);
     //$fecha = Carbon::parse(Carbon::now()->subDays(2))->format('Y-m-d');
     $fecha = '2024-01-18';
     GeoAsistencia::where('date','>=', '2024-01-18')->delete();
