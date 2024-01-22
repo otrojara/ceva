@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
          //$schedule->command('moneda:create')->everyMinute();
-         $schedule->command('proceso:trabajadores')->dailyAt('20:20');
+         $schedule->command('proceso:trabajadores')->dailyAt('21:18');
         //$schedule->call([ApiGeoController::class, 'processTrabajadores'])->dailyAt('01:00');
     }
 
