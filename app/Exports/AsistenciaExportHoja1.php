@@ -42,7 +42,7 @@ class AsistenciaExportHoja1 implements FromCollection,WithHeadings
         'HORAS_EXTRAS (EN MINUTOS)',
         'HORAS_EXTRAS (EN HORAS)',
         'ATRASO (EN MINUTOS)'
-        
+
 
         ];
     }
@@ -50,7 +50,7 @@ class AsistenciaExportHoja1 implements FromCollection,WithHeadings
     public function collection()
     {
 
-        return  DB::table('REP_GEOASISTENCIA as REP')
+        return  DB::table('rep_geoasistencia as REP')
                 ->select('REP.RUT','REP.NOMBRE','REP.CARGO','REP.CATEGORIA','REP.EMPRESA','REP.TIPO_TURNO','REP.COD_BU','REP.BU','REP.INICIO_CONTRATO','REP.TERMINO_CONTRATO',
                 DB::raw(" SUM(PRESENTE) AS PRESENTE "),
                 DB::raw(" SUM(libre) AS libre "),
