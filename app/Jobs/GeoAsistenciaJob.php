@@ -33,7 +33,7 @@ class GeoAsistenciaJob implements ShouldQueue
         set_time_limit(1800);
         //$fecha = Carbon::parse(Carbon::now()->subDays(2))->format('Y-m-d');
         $fecha = '2024-01-29';
-        GeoAsistencia::where('date','>=', '2024-01-18')->delete();
+        GeoAsistencia::where('date','>=', '2024-01-29')->delete();
 
         $FECHAINI = '2024-01-29';
         $FECHAINI = str_replace("-","",$FECHAINI);
@@ -47,7 +47,7 @@ class GeoAsistenciaJob implements ShouldQueue
         $trabajadores = GeoTrabajadores::select('rut','fecha')
             //->where('fecha','2023-11-10')
             ->where('fecha',Carbon::parse(Carbon::now())->format('Y-m-d'))
-            ->whereIN('rut', array('206488778','262163695','260072153','265735800','159810658','267685142','133527745','167868215','205801162','155069856','118595637','109026468','188507646','192855020','171286476','266328427','151887902','198876356','199117556','194798296','197676272','212308676','192340756','126396570'))
+            //->whereIN('rut', array('206488778','262163695','260072153','265735800','159810658','267685142','133527745','167868215','205801162','155069856','118595637','109026468','188507646','192855020','171286476','266328427','151887902','198876356','199117556','194798296','197676272','212308676','192340756','126396570'))
             ->get();
 
 
@@ -72,7 +72,7 @@ class GeoAsistenciaJob implements ShouldQueue
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => " {\"StartDate\": \"20240101000000\",\n\"EndDate\": \"20240129000000\",\n\"UserIds\": \"$trabajador->rut\"}",
+                CURLOPT_POSTFIELDS => " {\"StartDate\": \"20240101000000\",\n\"EndDate\": \"20240107000000\",\n\"UserIds\": \"$trabajador->rut\"}",
                 //CURLOPT_POSTFIELDS => " {\"StartDate\": \"20230909000000\",\n\"EndDate\": \"20230909000000\",\n\"UserIds\": \"271862156\"}",
                 CURLOPT_HTTPHEADER => [
                     "Content-Type: application/json",
