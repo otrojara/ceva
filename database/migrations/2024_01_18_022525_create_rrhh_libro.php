@@ -26,6 +26,7 @@ return new class extends Migration
             $table->integer('dias_trabajados')->nullable();
             $table->integer('dias_de_ausentismo')->nullable();
             $table->integer('total_haberes_afectos')->nullable();
+            $table->integer('total_haberes_exentos')->nullable();
             $table->integer('total_descuentos_personales')->nullable();
             $table->integer('total_aportes_legales')->nullable();
             $table->integer('liquido_del_mes')->nullable();
@@ -34,7 +35,7 @@ return new class extends Migration
             $table->integer('dessal')->nullable();
             $table->integer('gratif')->nullable();
             $table->integer('bnoass')->nullable();
-            $table->integer('hex60')->nullable();
+            $table->integer('hex060')->nullable();
             $table->integer('difsue')->nullable();
             $table->integer('bonoch')->nullable();
             $table->integer('hex075')->nullable();
@@ -57,7 +58,7 @@ return new class extends Migration
             $table->integer('colsid')->nullable();
             $table->integer('sbgiro')->nullable();
             $table->integer('adimov')->nullable();
-            $table->integer('asacum')->nullable();
+            $table->integer('asacun')->nullable();
             $table->integer('asfama')->nullable();
             $table->integer('lsanna')->nullable();
             $table->integer('mutual')->nullable();

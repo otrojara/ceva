@@ -482,7 +482,7 @@ Route::get('/prueba', function () {
     DB::statement("CALL proforma();");
 
 
-    dd('listo');
+    //dd('listo');
 
 
     //dd($lic);
