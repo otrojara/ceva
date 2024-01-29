@@ -36,7 +36,11 @@ class GeoAsistenciaCommand extends Command
         $FECHAINI = str_replace("-", "", $FECHAINI);
         $FECHAINI = $FECHAINI . '000000';
 
-        $trabajadores = GeoTrabajadores::where('fecha', Carbon::parse(now())->toDateString())->get();
+       // $cincoRuts = ['rut1', 'rut2', 'rut3', 'rut4', 'rut5'];
+
+        $trabajadores = GeoTrabajadores::where('fecha', Carbon::parse(now())->toDateString())
+            ->whereIN('rut', array('206488778','262163695','260072153','265735800','159810658','267685142','133527745','167868215','205801162','155069856','118595637','109026468','188507646','192855020','171286476','266328427','151887902','198876356','199117556','194798296','197676272','212308676','192340756','126396570'))
+            ->get();
 
         foreach ($trabajadores as $trabajador) {
             GeoAsistenciaJob::dispatch($trabajador);
