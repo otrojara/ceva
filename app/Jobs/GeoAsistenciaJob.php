@@ -203,7 +203,7 @@ class GeoAsistenciaJob implements ShouldQueue
             'to_timeofftypedescription' => $to_timeofftypedescription
 
         ]);
-        $fecha = '2024-01-29';
+        $fecha = '2024-01-30';
         $turno = GeoTrabajadores::select('rut')->where('fecha', $fecha)->get();
 
         foreach ($turno as $tu ) {
