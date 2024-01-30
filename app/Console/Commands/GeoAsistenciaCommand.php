@@ -15,7 +15,7 @@ class GeoAsistenciaCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'proceso:asistenciabien';
+    protected $signature = 'proceso:asistenciabn';
 
     /**
      * The console command description.
