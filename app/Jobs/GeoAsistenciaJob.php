@@ -203,26 +203,26 @@ class GeoAsistenciaJob implements ShouldQueue
             'to_timeofftypedescription' => $to_timeofftypedescription
 
         ]);
-        $fecha = '2024-01-30';
-        $turno = GeoTrabajadores::select('rut')->where('fecha', $fecha)->get();
+//        $fecha = '2024-01-30';
+//        $turno = GeoTrabajadores::select('rut')->where('fecha', $fecha)->get();
 
-        foreach ($turno as $tu ) {
-
-            $results = DB::select("select shiftdisplay FROM geo_asistencia as aa
-    WHERE ShiftDisplay IS NOT NULL AND ShiftDisplay NOT IN ('BREAK','Sin Turno')
-    AND date < '2023-09-27' and aa.rut='$tu->rut' ORDER BY DATE DESC limit 1");
-
-
-            if(empty($results[0]->shiftdisplay)) {
-
-
-            }else{
-                GeoTrabajadores::where('rut',$tu->rut)
-                    ->where('fecha',$fecha)
-                    ->update(['turno' => $results[0]->shiftdisplay]);
-            }
-
-        }
+//        foreach ($turno as $tu ) {
+//
+//            $results = DB::select("select shiftdisplay FROM geo_asistencia as aa
+//    WHERE ShiftDisplay IS NOT NULL AND ShiftDisplay NOT IN ('BREAK','Sin Turno')
+//    AND date < '2023-09-27' and aa.rut='$tu->rut' ORDER BY DATE DESC limit 1");
+//
+//
+//            if(empty($results[0]->shiftdisplay)) {
+//
+//
+//            }else{
+//                GeoTrabajadores::where('rut',$tu->rut)
+//                    ->where('fecha',$fecha)
+//                    ->update(['turno' => $results[0]->shiftdisplay]);
+//            }
+//
+//        }
 
         // Lógica para procesar cada asistencia individual
         // ...
