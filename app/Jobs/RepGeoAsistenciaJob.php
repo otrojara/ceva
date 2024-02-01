@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\RepGeoAsistencia;
 use App\Models\GeoAsistencia;
+use App\Models\GeoTrabajadores;
 
 class RepGeoAsistenciaJob implements ShouldQueue
 {
@@ -35,9 +36,14 @@ class RepGeoAsistenciaJob implements ShouldQueue
         RepGeoAsistencia::truncate();
 
 
-        $results = DB::select("select cal.fecha as calfecha,cal.dia,tr.*
-            FROM sis_calendario as cal ,geo_trabajadores as tr
-            WHERE tr.fecha='2024-01-29' and cal.fecha BETWEEN '2024-01-01' and '2024-01-07' ");
+        $results = DB::select(
+            "SELECT cal.fecha AS calfecha, cal.dia, tr.*
+                    FROM sis_calendario AS cal, geo_trabajadores AS tr
+                    WHERE tr.fecha = ? AND cal.fecha BETWEEN '2024-01-01' AND '2024-01-07'",
+            [$fecha]
+        );
+
+
 
         foreach ($results as $r) {
             RepGeoAsistencia::create([
@@ -60,25 +66,29 @@ class RepGeoAsistenciaJob implements ShouldQueue
         }
 
 
+//        $info = RepGeoasistencia::select('rep_geoasistencia.rut AS rutra', 'rep_geoasistencia.*', 'geo_asistencia.*')
+//            ->leftJoin('geo_asistencia', function ($join) {
+//                $join->on('geo_asistencia.rut', '=', 'rep_geoasistencia.rut')
+//                    ->on('geo_asistencia.date', '=', 'rep_geoasistencia.fecha');
+//            })
+//            ->get();
+
+//        $info = RepGeoasistencia::select('rep_geoasistencia.rut AS rutra', 'rep_geoasistencia.*', 'geo_asistencia.*')
+//            ->leftJoin('geo_asistencia', function ($join) {
+//                $join->on('geo_asistencia.rut', '=', 'rep_geoasistencia.rut')
+//                    ->on('geo_asistencia.date', '=', DB::raw('(SELECT MAX(date) FROM geo_asistencia WHERE rut = rep_geoasistencia.rut)'));
+//            })
+//            ->get();
+
+
         $info = DB::select("select tra.rut AS rutra,tra.*,asi.*
     FROM rep_geoasistencia as tra
     LEFT JOIN geo_asistencia as asi ON asi.rut=tra.rut AND asi.date=tra.fecha
     ");
 
-
-
-
-
-
         RepGeoAsistencia::truncate();
 
         foreach ($info as $rep) {
-
-
-
-
-            // echo $file_extension;
-
 
             RepGeoAsistencia::create([
 
@@ -140,34 +150,44 @@ class RepGeoAsistenciaJob implements ShouldQueue
 
         }
 
-        DB::statement("CALL RepGeoAsistencia();");
-
-
-
+        //DB::statement("UPDATE rep_geoasistencia SET tipo_turno = (SELECT geo_turnos.turno FROM geo_turnos WHERE geo_turnos.horario = rep_geoasistencia.turno)");
+        DB::table('rep_geoasistencia')
+            ->update([
+                'tipo_turno' => DB::raw('(SELECT geo_turnos.turno FROM geo_turnos WHERE geo_turnos.horario = rep_geoasistencia.turno LIMIT 1)')
+            ]);
 
         DB::statement("update rep_geoasistencia SET tipo_turno = 'PART TIME' WHERE GRUPO LIKE '%PART TIME%'");
         DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE ART22 = 'SI'");
 
-        //RepGeoAsistencia::where('fecha','>',$fecha)->update(['presente' => 1]);
+
+
+//
+//        DB::statement("CALL RepGeoAsistencia();");
+//
+//
+//
+//
+//        DB::statement("update rep_geoasistencia SET tipo_turno = 'PART TIME' WHERE GRUPO LIKE '%PART TIME%'");
+//        DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE ART22 = 'SI'");
+//
+//
+        DB::statement("update rep_geoasistencia SET presente = 1");
+
         RepGeoAsistencia::where('ausente','True')->update(['presente' => 0]);
         RepGeoAsistencia::where('ausente',null)->where('fecha','<=',$fecha)->update(['presente' => 0]);
         RepGeoAsistencia::where('art22','SI')->update(['presente' => 1]);
 
         RepGeoAsistencia::whereIN('permiso',array('Licencia Médica Estándar','Vacaciones'))->update(['presente' => 0]);
-
-        // GeoAsistencia::where('date','>=', $fecha)->delete();
-
-        // RepGeoAsistencia::table('countries')->where('name','LIKE','%'.$term.'%')->delete();
-
-
-
+//
+//
+//
+//
         DB::statement("update rep_geoasistencia SET ATRASO = (CAST(SUBSTRING(ATRASO, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(ATRASO, 4, 5) AS UNSIGNED)");
         DB::statement("update rep_geoasistencia SET horas_extras = (CAST(SUBSTRING(horas_extras, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(horas_extras, 4, 5) AS UNSIGNED)");
         DB::statement("update rep_geoasistencia SET ATRASO = 0 where  atraso <= 15");
-
-        //EN MINUTOS Y HORAS ATRASOS Y HHEE
-        //DB::statement("update rep_geoasistencia SET horas_extras = 0 WHERE atraso <= 15");
-
+//
+//
+//
         DB::statement("update rep_geoasistencia SET licencia = 1 WHERE permiso = 'Licencia Médica Estándar'");
         DB::statement("update rep_geoasistencia SET vacaciones = 1 WHERE permiso = 'Vacaciones'");
 
@@ -186,8 +206,8 @@ class RepGeoAsistenciaJob implements ShouldQueue
 
         RepGeoAsistencia::where('presente',0)->update(['no_presente' => 1]);
 
-
-        DB::statement("CALL proforma();");
+//
+//        DB::statement("CALL proforma();");
 
     }
 }

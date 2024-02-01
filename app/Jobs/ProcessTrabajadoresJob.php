@@ -36,6 +36,8 @@ class ProcessTrabajadoresJob implements ShouldQueue
     public function handle(): void
     {
 
+        GeoTrabajadores::where('fecha', $this->fecha)->delete();
+
         $batchSize = 100;
         $chunks = array_chunk($this->trabajadoresData, $batchSize);
 

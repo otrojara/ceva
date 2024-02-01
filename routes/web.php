@@ -57,69 +57,40 @@ Route::get('/procesar', [ApiGeoController::class, 'processTrabajadores']);
 
 
 Route::get('/repgeoasistencia', function () {
-
-    dd(Carbon::now());
-
-
     $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
 
-    // $tipoturno = GeoTurno::get();
+    RepGeoAsistencia::truncate();
 
 
-    // foreach ($tipoturno as $tp) {
+    $results = DB::select(
+        "SELECT cal.fecha AS calfecha, cal.dia, tr.*
+    FROM sis_calendario AS cal, geo_trabajadores AS tr
+    WHERE tr.fecha = ? AND cal.fecha BETWEEN '2024-01-01' AND '2024-01-07'",
+        [$fecha]
+    );
 
-    //             RepGeoAsistencia::where('turno',$tp->horario)
-    //             ->update(['tipo_turno' => $tp->turno]);
+dd($results);
 
-    // }
+    foreach ($results as $r) {
+        RepGeoAsistencia::create([
+            'fecha' => $r->calfecha,
+            'dia' => $r->dia,
+            'rut' => $r->rut,
+            'empresa' => $r->empresa,
+            'nombre' => $r->nombres.' '.$r->apellidos,
+            'art22' => $r->ART22,
+            'cod_cargo' => 'falta ',
+            'cargo' => $r->cargo,
+            'categoria' => $r->categoria,
+            'estado' => $r->enabled,
+            'grupo' => $r->grupo,
+            'bu' => $r->bu,
+            'cod_bu' => $r->cod_bu,
+            'inicio_contrato' => $r->inicio_contrato,
+            'termino_contrato' => $r->fin_contrato
+        ]);
+    }
 
-
-    DB::statement("update rep_geoasistencia SET tipo_turno = 'PART TIME' WHERE GRUPO LIKE '%PART TIME%'");
-    DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE ART22 = 'SI'");
-
-
-
-
-
-
-    //RepGeoAsistencia::where('fecha','>',$fecha)->update(['presente' => 1]);
-    RepGeoAsistencia::where('ausente','True')->update(['presente' => 0]);
-    RepGeoAsistencia::where('ausente',null)->where('fecha','<=',$fecha)->update(['presente' => 0]);
-    RepGeoAsistencia::where('art22','SI')->update(['presente' => 1]);
-
-    RepGeoAsistencia::whereIN('permiso',array('Licencia Médica Estándar','Vacaciones'))->update(['presente' => 0]);
-
-   // GeoAsistencia::where('date','>=', $fecha)->delete();
-
-   // RepGeoAsistencia::table('countries')->where('name','LIKE','%'.$term.'%')->delete();
-
-
-
-   DB::statement("update rep_geoasistencia SET ATRASO = (CAST(SUBSTRING(ATRASO, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(ATRASO, 4, 5) AS UNSIGNED)");
-   DB::statement("update rep_geoasistencia SET horas_extras = (CAST(SUBSTRING(horas_extras, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(horas_extras, 4, 5) AS UNSIGNED)");
-   DB::statement("update rep_geoasistencia SET ATRASO = 0 where  atraso <= 15");
-
-   //EN MINUTOS Y HORAS ATRASOS Y HHEE
-   //DB::statement("update rep_geoasistencia SET horas_extras = 0 WHERE atraso <= 15");
-
-   DB::statement("update rep_geoasistencia SET licencia = 1 WHERE permiso = 'Licencia Médica Estándar'");
-   DB::statement("update rep_geoasistencia SET vacaciones = 1 WHERE permiso = 'Vacaciones'");
-
-   DB::statement("update rep_geoasistencia SET cumpleanio=1 WHERE permiso = 'CUMPLEAÑOS'");
-   DB::statement("update rep_geoasistencia SET administrativo=1 WHERE permiso = 'P. Administrativo'");
-
-   DB::statement("update rep_geoasistencia SET libre = 1 WHERE ausente = 'False' and trabajado = 'False' ");
-   DB::statement("update rep_geoasistencia SET permiso_con_goce = 1 WHERE permiso IN (SELECT nombre FROM geo_permisos WHERE goce_sueldo = 'Si') ");
-
-   DB::statement("delete FROM  rep_geoasistencia WHERE termino_contrato < fecha AND ingreso IS NULL AND salida IS NULL AND termino_contrato NOT IN ('--')");
-   DB::statement("delete from rep_geoasistencia WHERE inicio_contrato > fecha AND ingreso IS NULL AND salida IS NULL");
-
-   RepGeoAsistencia::where('grupo', 'like', '%PART TIME%')->where('presente',0)->delete();
-   RepGeoAsistencia::where('grupo', 'like', '%PART TIME%')->where('trabajado','False')->delete();
-   RepGeoAsistencia::where('grupo', 'like', '%PART TIME%')->where('fecha','>',$fecha)->delete();
-
-    RepGeoAsistencia::where('presente',0)->update(['no_presente' => 1]);
-    dd('listo');
 
 });
 
