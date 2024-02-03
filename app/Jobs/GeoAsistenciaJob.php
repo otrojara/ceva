@@ -77,7 +77,7 @@ class GeoAsistenciaJob implements ShouldQueue
     {
         return json_encode([
             "StartDate" => "20240101000000",
-            "EndDate" => "20240131000000",
+            "EndDate" => "20240203000000",
             "UserIds" => $this->trabajadoresData->rut
         ]);
     }

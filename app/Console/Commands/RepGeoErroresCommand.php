@@ -13,7 +13,7 @@ class RepGeoErroresCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'proceso:pcuatro';
+    protected $signature = 'proceso:xpcuatro';
 
     /**
      * The console command description.

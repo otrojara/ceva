@@ -27,24 +27,24 @@ class AsistenciaController extends Controller
     {
 
         $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
-        $GeoTrabajadores = GeoTrabajadores::where('fecha',$fecha)->count(); 
+        $GeoTrabajadores = GeoTrabajadores::where('fecha',$fecha)->count();
 
         $sinCargos = GeoTrabajadores::where('fecha',$fecha)
         ->where('enabled',1)
         ->where('cargo',NULL)
-        ->get(); 
+        ->get();
 
         $sinInicioContrato = GeoTrabajadores::where('fecha',$fecha)
         ->where('enabled',1)
         ->where('inicio_contrato','--')
-        ->get(); 
-        
+        ->get();
+
         $cargos = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_cargo', 1)->orderBy('bu', 'DESC')->get();
         $cargoscount = count($cargos);
 
         $turnos = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_turno', 1)->orderBy('bu', 'DESC')->get();
         $turnoscount = count($turnos);
-        
+
         $icontrato = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_inicio_contrato', 1)->orderBy('bu', 'DESC')->get();
         $icontratocount = count($icontrato) ;
 
@@ -101,12 +101,12 @@ class AsistenciaController extends Controller
         //
     }
 
-    public function export() 
+    public function export()
     {
         return Excel::download(new AsistenciaExport, 'users.xlsx');
     }
 
-    public function exportSemanalMeli() 
+    public function exportSemanalMeli()
     {
         return Excel::download(new RepSemanalMeliExport, 'Semanal.xlsx');
     }
@@ -117,19 +117,19 @@ class AsistenciaController extends Controller
         // $cargos = GeoTrabajadores::where('cargo', NULL)->WHERE('enabled',1)->where('fecha',Carbon::parse(Carbon::now())->format('Y-m-d'))->get();
         // $cargoscount = $cargos->count();
         //$fecha = Carbon::parse(Carbon::now()->subDays(1))->format('Y-m-d');
-        
+
         $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
 
 
         $errores = RepGeoErrores::select()->where('fecha',$fecha)->orderBy('bu', 'DESC')->get();
 
-        
+
         $cargos = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_cargo', 1)->orderBy('bu', 'DESC')->get();
         $cargoscount = count($cargos);
 
         $turnos = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_turno', 1)->orderBy('bu', 'DESC')->get();
         $turnoscount = count($turnos);
-        
+
         $icontrato = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_inicio_contrato', 1)->orderBy('bu', 'DESC')->get();
         $icontratocount = count($icontrato) ;
 
@@ -139,7 +139,7 @@ class AsistenciaController extends Controller
 
         $salida = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_salida', 1)->orderBy('bu', 'DESC')->get();
         $salidacount = count($salida);
-     
+
         //dd($salida);
         //$salidacount = count($salida);
 
@@ -163,10 +163,13 @@ class AsistenciaController extends Controller
 
         $users = User::whereHas("roles", function($q){ $q->where("name", "Administrador"); })->get();
 
-        foreach ($users  as $us) {
-            Mail::to($us->email)->send(new AlertaGeoVictoria($data));
-        }
-    
+        Mail::to('djaramontenegro@gmail.com')->send(new AlertaGeoVictoria($data));
+
+        //Codigo, correcto, descomentar cuando se utilice la plataforma
+        //foreach ($users  as $us) {
+        //    Mail::to($us->email)->send(new AlertaGeoVictoria($data));
+        //}
+
        // dd('Mail sent successfully');
 
         return redirect()->route('areas.recursoshumanos.asistencia.index');
@@ -188,39 +191,39 @@ class AsistenciaController extends Controller
     //$fecha = Carbon::parse(Carbon::now()->subDays(1))->format('Y-m-d');
 
 
-        
+
         $users = User::whereHas("roles", function($q){ $q->where("name", "Analista"); })->get();
-        
+
         foreach ($users as $u) {
-            
+
             $bus = BusinessUnitUser::select('business_unit_id')->where('user_id',$u->id)->get();
-    
+
             $buNAME = BusinessUnit::select('nombre')->whereIN('id',$bus)->get();
-    
+
             $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
 
 
             $errores = RepGeoErrores::select()->where('fecha',$fecha)->whereIN('bu',$buNAME)->orderBy('bu', 'DESC')->get();
-            
-            
+
+
             $cargos = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_cargo', 1)->whereIN('bu',$buNAME)->orderBy('bu', 'DESC')->get();
             $cargoscount = count($cargos);
 
-            
-        
+
+
             $turnos = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_turno', 1)->whereIN('bu',$buNAME)->orderBy('bu', 'DESC')->get();
             $turnoscount = count($turnos);
-            
+
             $icontrato = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_inicio_contrato', 1)->whereIN('bu',$buNAME)->orderBy('bu', 'DESC')->get();
             $icontratocount = count($icontrato) ;
-        
+
             $fcontrato = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_fin_contrato', 1)->whereIN('bu',$buNAME)->orderBy('bu', 'DESC')->get();
             $fcontratocount = count($fcontrato);
-        
-        
+
+
             $salida = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_salida', 1)->whereIN('bu',$buNAME)->orderBy('bu', 'DESC')->get();
             $salidacount = count($salida);
-            
+
             //dd($buNAME);
 
             $pdf = Pdf::loadView('pdf.egeovictoria',[
@@ -233,23 +236,23 @@ class AsistenciaController extends Controller
                 'fecha' => $fecha
                 ]);
                 //return $pdf->download('invoice.pdf');
-            
-            
+
+
                 //$data["email"] = "djaramontenegro@gmail.com";
                 $data["pdf"] = $pdf;
-            
+
                 //usuarios = model_has_roles::select('email')->
-            
-            
+
+
                 //$users = User::whereHas("roles", function($q){ $q->where("name", "Administrador"); })->get();
-            
-              
+
+
                     Mail::to($u->email)->send(new AlertaGeoVictoria($data));
-                
-            
-                
+
+
+
         }
-    
+
 
 
 
@@ -258,12 +261,12 @@ class AsistenciaController extends Controller
       //  dd('Mail sent successfully');
 
       return redirect()->route('areas.recursoshumanos.asistencia.index');
-   
- 
+
+
     //dd($salida);
     //$salidacount = count($salida);
 
-    
+
 
 //     Mail::to('djaramontenegro@gmail.com')
 //     ->send(new AlertaGeoVictoria)

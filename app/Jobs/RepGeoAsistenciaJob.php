@@ -39,7 +39,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
         $results = DB::select(
             "SELECT cal.fecha AS calfecha, cal.dia, tr.*
                     FROM sis_calendario AS cal, geo_trabajadores AS tr
-                    WHERE tr.fecha = ? AND cal.fecha BETWEEN '2024-01-01' AND '2024-01-07'",
+                    WHERE tr.fecha = ? AND cal.fecha BETWEEN '2024-01-01' AND '2024-01-31'",
             [$fecha]
         );
 
