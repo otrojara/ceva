@@ -75,9 +75,12 @@ class GeoAsistenciaJob implements ShouldQueue
 
     protected function generarPayload()
     {
+        $FECHAHOY = Carbon::now()->format('Ymd') . '000000';
+        $FECHAMAN = Carbon::now()->subDays(7)->format('Ymd') . '000000';
+
         return json_encode([
-            "StartDate" => "20240101000000",
-            "EndDate" => "20240203000000",
+            "StartDate" => $FECHAMAN,
+            "EndDate" => $FECHAHOY,
             "UserIds" => $this->trabajadoresData->rut
         ]);
     }
