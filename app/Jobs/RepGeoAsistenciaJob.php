@@ -52,7 +52,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
                 'rut' => $r->rut,
                 'empresa' => $r->empresa,
                 'nombre' => $r->nombres.' '.$r->apellidos,
-                'art22' => $r->ART22,
+                'art22' => $r->art22,
                 'cod_cargo' => 'falta ',
                 'cargo' => $r->cargo,
                 'categoria' => $r->categoria,
@@ -157,7 +157,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
             ]);
 
         DB::statement("update rep_geoasistencia SET tipo_turno = 'PART TIME' WHERE GRUPO LIKE '%PART TIME%'");
-        DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE ART22 = 'SI'");
+        DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE art22 = 'SI'");
 
 
 
