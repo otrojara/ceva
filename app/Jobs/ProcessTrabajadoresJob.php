@@ -98,10 +98,14 @@ class ProcessTrabajadoresJob implements ShouldQueue
         foreach ($trabajadores as $RES) {
             $contrato = Carbon::parse($RES['ContractDate'])->format('Y-m-d');
             $fincontrato = Carbon::parse($RES['endContractDate'])->format('Y-m-d');
-            $art22 = $RES['Custom2'] == 'Art.22' ? 'SI' : null;
 
             $tmp = explode(' ', $RES['GroupDescription']);
             $empresa = end($tmp);
+            $art22 = ($RES['Custom2'] === 'Art.22') ? 'SI' : NULL;
+
+            //if($RES['Identifier'] === '15369589K'){
+            //    dd($RES['Custom2']);
+            //}
 
             $mappedTrabajadores[] = [
                 'nombres' => $RES['Name'],
@@ -111,12 +115,14 @@ class ProcessTrabajadoresJob implements ShouldQueue
                 'email' => $RES['Email'],
                 'cod_cargo' => $RES['Custom1'],
                 'grupo' => $RES['GroupDescription'],
-                'ART22' => $art22,
+                'art22' => $art22,
                 'inicio_contrato' => $contrato,
                 'fin_contrato' => $fincontrato,
                 'empresa' => $empresa,
                 'enabled' => $RES['Enabled']
             ];
+
+
         }
 
         return $mappedTrabajadores;

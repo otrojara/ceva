@@ -12,7 +12,7 @@ class ProcessTrabajadores extends Command
      *
      * @var string
      */
-    protected $signature = 'proceso:xpuno';
+    protected $signature = 'proceso:ypuno';
 
     /**
      * The console command description.

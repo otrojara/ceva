@@ -22,7 +22,7 @@ class GeoTrabajadores extends Model
         'grupo',
         'bu',
         'cod_bu',
-        'ART22',
+        'art22',
         'cod_cargo',
         'cargo',
         'categoria',
