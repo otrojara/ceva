@@ -8,12 +8,12 @@
 
 @section('content')
 @if (session('info'))
-        
+
 <div class="alert alert-primary" role="alert">
     <strong>¡Éxito!</strong> {{session('info')}}
 </div>
 
-@endif  
+@endif
 
 <section class="content">
 
@@ -39,7 +39,7 @@
                       </div>
                     </div>
                   </div>
-                
+
                 </div>
                 <!-- /.invoice -->
               </div>
@@ -67,7 +67,7 @@
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              
+
             </div>
           </div>
 
@@ -82,7 +82,7 @@
               <div class="icon">
                 <i class="ion ion-man"></i>
               </div>
-              
+
             </div>
           </div>
           <!-- ./col -->
@@ -97,7 +97,7 @@
               <div class="icon">
                 <i class="ion ion-clock"></i>
               </div>
-              
+
             </div>
           </div>
           <!-- ./col -->
@@ -114,7 +114,7 @@
               <div class="icon">
                 <i class="ion ion-document-text"></i>
               </div>
-              
+
             </div>
           </div>
         <!-- ./col -->
@@ -134,81 +134,83 @@
         <div class="row">
             <div class=" col-6">
                 <div class="card">
-            
+
                     <div class="card-header">
                         TRABAJADORES SIN CARGO
                     </div>
-                
+
                     <div class="card-body">
-                        <table id="usersTable" class="table table-striped table-sm">
-                            
-                            <thead>
+                        @if($sinCargos->isEmpty())
+                            <img src="{{ URL::asset('images/no-data.jpg') }}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                        @else
+                            <table id="usersTable" class="table table-striped table-sm">
+                                <thead>
                                 <tr>
                                     <th>nombre</th>
                                     <th>Rut</th>
                                     <th>BU</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 @forelse ($sinCargos as $bu)
                                     <tr>
-                                        <td>{{$bu->nombres}}</td>
-                                        <td>{{$bu->rut}}</td>
-                                        <td>{{$bu->grupo}}</td>
+                                        <td>{{ $bu->nombres }}</td>
+                                        <td>{{ $bu->rut }}</td>
+                                        <td>{{ $bu->grupo }}</td>
                                     </tr>
-                                    
                                 @empty
-                                <tr>
-                                    <td colspan="4">No hay registros</td>
-                                </tr>
-                                
-                                    
+                                    <tr>
+                                        <td colspan="3">No hay registros</td>
+                                    </tr>
                                 @endforelse
-                
-                            </tbody>
-                
-                        </table>
+                                </tbody>
+                            </table>
+                        @endif
                     </div>
+
+
+
                 </div>
             </div>
-            
+
             <div class=" col-6">
                 <div class="card">
-            
+
                     <div class="card-header">
                         TRABAJADORES SIN INICIO CONTRATO
                     </div>
-                
                     <div class="card-body">
-                        <table id="sinIC" class="table table-striped table-sm">
-                            
-                            <thead>
+                        @if($sinInicioContrato->isEmpty())
+                            <img src="{{ URL::asset('images/no-data.jpg') }}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                        @else
+                            <table id="sinIC" class="table table-striped table-sm">
+                                <thead>
                                 <tr>
                                     <th>nombre</th>
                                     <th>Rut</th>
                                     <th>BU</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 @forelse ($sinInicioContrato as $sic)
                                     <tr>
-                                        <td>{{$sic->nombres}}</td>
-                                        <td>{{$sic->rut}}</td>
-                                        <td>{{$sic->grupo}}</td>
+                                        <td>{{ $sic->nombres }}</td>
+                                        <td>{{ $sic->rut }}</td>
+                                        <td>{{ $sic->grupo }}</td>
                                     </tr>
-                                    
                                 @empty
-                                <tr>
-                                    <td colspan="4">No hay registros</td>
-                                </tr>
-                                
-                                    
+                                    <tr>
+                                        <td colspan="3">No hay registros</td>
+                                    </tr>
                                 @endforelse
-                
-                            </tbody>
-                
-                        </table>
+                                </tbody>
+                            </table>
+                        @endif
                     </div>
+
+
+
+
                 </div>
             </div>
 
@@ -225,7 +227,7 @@
 
 
 
-    
+
 
   </section>
 
@@ -235,7 +237,7 @@
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
-    
+
 
     <link href="datatables/datatables.min.css" rel="stylesheet">
 @stop
@@ -258,7 +260,7 @@
         "autoWidth": false,
         "order": [[ 0, "asc" ]]
     });
-  
+
     });
   </script>
 

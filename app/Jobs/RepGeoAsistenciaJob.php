@@ -33,37 +33,54 @@ class RepGeoAsistenciaJob implements ShouldQueue
 
         $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
 
-        RepGeoAsistencia::truncate();
+       // RepGeoAsistencia::truncate();
+
+        $fechaAnt = Carbon::now()->subDays(7)->format('Y-m-d');
+       // $fechaAnt = '2024-02-01';
+
+        RepGeoAsistencia::where('fecha', '>=', $fechaAnt)->delete();
+        //RepGeoAsistencia::truncate();
+
+        ini_set('memory_limit', '512M');
+//        $results = DB::select("select cal.fecha as calfecha,cal.dia,tr.*
+//        FROM sis_calendario as cal ,geo_trabajadores as tr
+//         WHERE tr.fecha='2024-02-12' and cal.fecha BETWEEN '2024-01-01' and '2024-01-31' ");
 
 
-        $results = DB::select(
-            "SELECT cal.fecha AS calfecha, cal.dia, tr.*
-                    FROM sis_calendario AS cal, geo_trabajadores AS tr
-                    WHERE tr.fecha = ? AND cal.fecha BETWEEN '2024-01-01' AND '2024-01-31'",
-            [$fecha]
-        );
+        $results = DB::select("SELECT cal.fecha as calfecha, cal.dia, tr.*, asi.*
+            FROM (
+                SELECT DISTINCT fecha,dia
+                FROM sis_calendario
+                WHERE fecha BETWEEN ? AND ?
+            ) AS cal
+            CROSS JOIN geo_trabajadores AS tr
+            LEFT JOIN geo_asistencia AS asi ON asi.rut = tr.rut AND asi.date = cal.fecha
+            WHERE tr.fecha = ? ",[$fechaAnt,$fecha,$fecha]);
 
 
+    //    dd($results);
+//
+//        foreach ($results as $r) {
+//            RepGeoAsistencia::create([
+//                'fecha' => $r->calfecha,
+//                'dia' => $r->dia,
+//                'rut' => $r->rut,
+//                'empresa' => $r->empresa,
+//                'nombre' => $r->nombres.' '.$r->apellidos,
+//                'art22' => $r->art22,
+//                'cod_cargo' => 'falta',
+//                'cargo' => $r->cargo,
+//                'categoria' => $r->categoria,
+//                'estado' => $r->enabled,
+//                'grupo' => $r->grupo,
+//                'bu' => $r->bu,
+//                'cod_bu' => $r->cod_bu,
+//                'inicio_contrato' => $r->inicio_contrato,
+//                'termino_contrato' => $r->fin_contrato
+//            ]);
+//        }
 
-        foreach ($results as $r) {
-            RepGeoAsistencia::create([
-                'fecha' => $r->calfecha,
-                'dia' => $r->dia,
-                'rut' => $r->rut,
-                'empresa' => $r->empresa,
-                'nombre' => $r->nombres.' '.$r->apellidos,
-                'art22' => $r->art22,
-                'cod_cargo' => 'falta ',
-                'cargo' => $r->cargo,
-                'categoria' => $r->categoria,
-                'estado' => $r->enabled,
-                'grupo' => $r->grupo,
-                'bu' => $r->bu,
-                'cod_bu' => $r->cod_bu,
-                'inicio_contrato' => $r->inicio_contrato,
-                'termino_contrato' => $r->fin_contrato
-            ]);
-        }
+
 
 
 //        $info = RepGeoasistencia::select('rep_geoasistencia.rut AS rutra', 'rep_geoasistencia.*', 'geo_asistencia.*')
@@ -81,40 +98,40 @@ class RepGeoAsistenciaJob implements ShouldQueue
 //            ->get();
 
 
-        $info = DB::select("select tra.rut AS rutra,tra.*,asi.*
-    FROM rep_geoasistencia as tra
-    LEFT JOIN geo_asistencia as asi ON asi.rut=tra.rut AND asi.date=tra.fecha
-    ");
+//        $info = DB::select("select tra.rut AS rutra,tra.*,asi.*
+//    FROM rep_geoasistencia as tra
+//    LEFT JOIN geo_asistencia as asi ON asi.rut=tra.rut AND asi.date=tra.fecha
+//    ");
 
-        RepGeoAsistencia::truncate();
+       // RepGeoAsistencia::truncate();
 
-        foreach ($info as $rep) {
+        foreach ($results as $rep) {
 
             RepGeoAsistencia::create([
 
-                'fecha' => $rep->fecha,
+                'fecha' => $rep->calfecha,
                 'dia' => $rep->dia,
-                'rut' => $rep->rutra,
-                'nombre' => $rep->nombre,
-                'estado' => $rep->estado,
+                'rut' => $rep->rut,
+                'nombre' => $rep->nombres,
+                'estado' => $rep->enabled,
                 'empresa' => $rep->empresa,
                 'bu' => $rep->bu,
                 'cod_bu' => $rep->cod_bu,
                 'grupo' => $rep->grupo,
-                'cod_cargo'  => $rep->cod_cargo,
+                'cod_cargo'  => 'falta',
                 'cargo' => $rep->cargo,
                 'categoria' => $rep->categoria,
                 'turno' => $rep->shiftdisplay,
                 'art22' => $rep->art22,
                 'inicio_contrato' => $rep->inicio_contrato,
-                'termino_contrato' => $rep->termino_contrato,
+                'termino_contrato' => $rep->fin_contrato,
                 'ingreso' => $rep->entrada_fecha,
                 'ingreso_origen' => $rep->entrada_origin,
                 'ingreso_grupo' => $rep->entrada_groupdescription,
                 'salida' => $rep->salida_fecha,
                 'salida_origen' => $rep->salida_origin,
                 'salida_grupo' => $rep->salida_groupdescription,
-                'atraso' => $rep->delay,
+                'atraso' => $rep->delay !== null ? $rep->delay : '00:00',
                 'horas_extras' => $rep->assignedextratime,
                 'permiso' => $rep->to_timeofftypedescription,
                 'type' => $rep->type,
@@ -167,8 +184,8 @@ class RepGeoAsistenciaJob implements ShouldQueue
 //
 //
 //
-//        DB::statement("update rep_geoasistencia SET tipo_turno = 'PART TIME' WHERE GRUPO LIKE '%PART TIME%'");
-//        DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE ART22 = 'SI'");
+        DB::statement("update rep_geoasistencia SET tipo_turno = 'PART TIME' WHERE GRUPO LIKE '%PART TIME%'");
+        DB::statement("update rep_geoasistencia SET tipo_turno = 'ADM' WHERE ART22 = 'SI'");
 //
 //
         DB::statement("update rep_geoasistencia SET presente = 1");
@@ -182,9 +199,20 @@ class RepGeoAsistenciaJob implements ShouldQueue
 //
 //
 //
-        DB::statement("update rep_geoasistencia SET ATRASO = (CAST(SUBSTRING(ATRASO, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(ATRASO, 4, 5) AS UNSIGNED)");
-        DB::statement("update rep_geoasistencia SET horas_extras = (CAST(SUBSTRING(horas_extras, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(horas_extras, 4, 5) AS UNSIGNED)");
-        DB::statement("update rep_geoasistencia SET ATRASO = 0 where  atraso <= 15");
+
+        //este tambine tiene error
+        // DB::statement("update rep_geoasistencia SET ATRASO = (CAST(SUBSTRING(ATRASO, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(ATRASO, 4, 5) AS UNSIGNED)");
+
+        DB::statement("
+    UPDATE rep_geoasistencia
+    SET ATRASO = (CAST(SUBSTRING(ATRASO, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(ATRASO, 4, 5) AS UNSIGNED)
+    WHERE fecha >= ?
+    ", [$fechaAnt]);
+
+
+
+        DB::statement("update rep_geoasistencia SET horas_extras = (CAST(SUBSTRING(horas_extras, 1, 2) AS UNSIGNED))*60+CAST(SUBSTRING(horas_extras, 4, 5) AS UNSIGNED) WHERE fecha >= ?", [$fechaAnt]);
+        DB::statement("update rep_geoasistencia SET ATRASO = 0 where  atraso <= 15 ");
 //
 //
 //
@@ -197,7 +225,9 @@ class RepGeoAsistenciaJob implements ShouldQueue
         DB::statement("update rep_geoasistencia SET libre = 1 WHERE ausente = 'False' and trabajado = 'False' ");
         DB::statement("update rep_geoasistencia SET permiso_con_goce = 1 WHERE permiso IN (SELECT nombre FROM geo_permisos WHERE goce_sueldo = 'Si') ");
 
-        DB::statement("delete FROM  rep_geoasistencia WHERE termino_contrato < fecha AND ingreso IS NULL AND salida IS NULL AND termino_contrato NOT IN ('--')");
+        //Este manda error
+         DB::statement("delete FROM  rep_geoasistencia WHERE termino_contrato < fecha AND ingreso IS NULL AND salida IS NULL AND termino_contrato NOT IN ('--')");
+
         DB::statement("delete from rep_geoasistencia WHERE inicio_contrato > fecha AND ingreso IS NULL AND salida IS NULL");
 
         RepGeoAsistencia::where('grupo', 'like', '%PART TIME%')->where('presente',0)->delete();
