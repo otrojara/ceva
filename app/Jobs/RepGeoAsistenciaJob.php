@@ -118,7 +118,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
                 'bu' => $rep->bu,
                 'cod_bu' => $rep->cod_bu,
                 'grupo' => $rep->grupo,
-                'cod_cargo'  => 'falta',
+                'cod_cargo'  => $rep->cod_cargo,
                 'cargo' => $rep->cargo,
                 'categoria' => $rep->categoria,
                 'turno' => $rep->shiftdisplay,
