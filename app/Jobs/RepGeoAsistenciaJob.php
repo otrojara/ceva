@@ -112,7 +112,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
                 'fecha' => $rep->calfecha,
                 'dia' => $rep->dia,
                 'rut' => $rep->rut,
-                'nombre' => $rep->nombres." ".$rep->apellidos,
+                'nombre' => $rep->nombres,
                 'estado' => $rep->enabled,
                 'empresa' => $rep->empresa,
                 'bu' => $rep->bu,
