@@ -112,7 +112,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
                 'fecha' => $rep->calfecha,
                 'dia' => $rep->dia,
                 'rut' => $rep->rut,
-                'nombre' => $rep->nombres,
+                'nombre' => $rep->nombres." ".$rep->apellidos,
                 'estado' => $rep->enabled,
                 'empresa' => $rep->empresa,
                 'bu' => $rep->bu,
@@ -223,7 +223,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
         DB::statement("update rep_geoasistencia SET administrativo=1 WHERE permiso = 'P. Administrativo'");
 
         DB::statement("update rep_geoasistencia SET libre = 1 WHERE ausente = 'False' and trabajado = 'False' ");
-        DB::statement("update rep_geoasistencia SET presente = 0 WHERE libre = 1 ");
+        //DB::statement("update rep_geoasistencia SET presente = 0 WHERE libre = 1 ");
         DB::statement("update rep_geoasistencia SET permiso_con_goce = 1 WHERE permiso IN (SELECT nombre FROM geo_permisos WHERE goce_sueldo = 'Si') ");
 
         //Este manda error
