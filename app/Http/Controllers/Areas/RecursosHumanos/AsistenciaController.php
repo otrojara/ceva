@@ -163,12 +163,12 @@ class AsistenciaController extends Controller
 
         $users = User::whereHas("roles", function($q){ $q->where("name", "Administrador"); })->get();
 
-        Mail::to('djaramontenegro@gmail.com')->send(new AlertaGeoVictoria($data));
+        //Mail::to('djaramontenegro@gmail.com')->send(new AlertaGeoVictoria($data));
 
-        //Codigo, correcto, descomentar cuando se utilice la plataforma
-        //foreach ($users  as $us) {
-        //    Mail::to($us->email)->send(new AlertaGeoVictoria($data));
-        //}
+       // Codigo, correcto, descomentar cuando se utilice la plataforma
+        foreach ($users  as $us) {
+            Mail::to($us->email)->send(new AlertaGeoVictoria($data));
+        }
 
        // dd('Mail sent successfully');
 
