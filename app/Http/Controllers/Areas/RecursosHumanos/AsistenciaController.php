@@ -118,6 +118,8 @@ class AsistenciaController extends Controller
         // $cargoscount = $cargos->count();
         //$fecha = Carbon::parse(Carbon::now()->subDays(1))->format('Y-m-d');
 
+
+
         $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
 
 
@@ -139,6 +141,8 @@ class AsistenciaController extends Controller
 
         $salida = RepGeoErrores::select('rut','nombre','bu')->where('fecha',$fecha)->where('sin_salida', 1)->orderBy('bu', 'DESC')->get();
         $salidacount = count($salida);
+
+
 
         //dd($salida);
         //$salidacount = count($salida);
@@ -163,12 +167,14 @@ class AsistenciaController extends Controller
 
         $users = User::whereHas("roles", function($q){ $q->where("name", "Administrador"); })->get();
 
+
         //Mail::to('djaramontenegro@gmail.com')->send(new AlertaGeoVictoria($data));
 
        // Codigo, correcto, descomentar cuando se utilice la plataforma
         foreach ($users  as $us) {
             Mail::to($us->email)->send(new AlertaGeoVictoria($data));
         }
+
 
        // dd('Mail sent successfully');
 

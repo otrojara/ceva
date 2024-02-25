@@ -58,6 +58,8 @@ class RepGeoAsistenciaJob implements ShouldQueue
             WHERE tr.fecha = ? ",[$fechaAnt,$fecha,$fecha]);
 
 
+
+
     //    dd($results);
 //
 //        foreach ($results as $r) {
@@ -108,6 +110,8 @@ class RepGeoAsistenciaJob implements ShouldQueue
         foreach ($results as $rep) {
 
             RepGeoAsistencia::create([
+
+
 
                 'fecha' => $rep->calfecha,
                 'dia' => $rep->dia,
@@ -238,7 +242,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
         RepGeoAsistencia::where('presente',0)->update(['no_presente' => 1]);
 
         //        RepGeoAsistencia::where('presente',null)->update(['presente' => 0]);
-//        RepGeoAsistencia::where('no_presente',null)->update(['no_presente' => 0]);
+        RepGeoAsistencia::where('no_presente',null)->update(['no_presente' => 0]);
 //        RepGeoAsistencia::where('libre',null)->update(['libre' => 0]);
 //        RepGeoAsistencia::where('licencia',null)->update(['licencia' => 0]);
 //        RepGeoAsistencia::where('vacaciones',null)->update(['vacaciones' => 0]);
