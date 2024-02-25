@@ -36,12 +36,11 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'url' => env('MAIL_URL'),
-            'host' => env('mail.workflowsystem.cl', 'smtp.mailgun.org'),
-            'port' => env(465, 587),
-            'encryption' => env('ssl', 'tls'),
-            'username' => env('alerta@workflowsystem.cl'),
-            'password' => env('Sistema2023.'),
+            'host' => 'mail.workflowsystem.cl',
+            'port' => 465,
+            'encryption' => 'ssl',
+            'username' => 'alerta@workflowsystem.cl',
+            'password' => 'Sistema2023.',
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
