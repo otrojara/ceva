@@ -191,8 +191,8 @@ Route::get('/prueba', function () {
 
     // RepGeoAsistencia::truncate();
 
-    // $fechaAnt = Carbon::now()->subDays(7)->format('Y-m-d');
-    $fechaAnt = '2024-02-01';
+    $fechaAnt = Carbon::now()->subDays(7)->format('Y-m-d');
+    //$fechaAnt = '2024-02-01';
 
     RepGeoAsistencia::where('fecha', '>=', $fechaAnt)->delete();
     //RepGeoAsistencia::truncate();
