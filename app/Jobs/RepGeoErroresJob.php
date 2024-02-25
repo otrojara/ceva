@@ -48,7 +48,7 @@ class RepGeoErroresJob implements ShouldQueue
 
         RepGeoErrores::whereIn('rut', function ($query) use ($fecha) {
             $query->select('rut')
-                ->from('Geo_Trabajadores')
+                ->from('geo_trabajadores')
                 ->whereNull('cod_cargo')
                 ->where('enabled', 1)
                 ->where('fecha', $fecha);
@@ -59,7 +59,7 @@ class RepGeoErroresJob implements ShouldQueue
 
         RepGeoErrores::whereIn('rut', function ($query) use ($fecha) {
             $query->select('rut')
-                ->from('Geo_Trabajadores')
+                ->from('geo_trabajadores')
                 ->whereNull('turno')
                 ->where('enabled', 1)
                 ->where('fecha', $fecha)
@@ -72,7 +72,7 @@ class RepGeoErroresJob implements ShouldQueue
 
         RepGeoErrores::whereIn('rut', function ($query) use ($fecha) {
             $query->select('rut')
-                ->from('Geo_Trabajadores')
+                ->from('geo_trabajadores')
                 ->where('inicio_contrato', '--')
                 ->where('enabled', 1)
                 ->where('fecha', $fecha);
@@ -82,7 +82,7 @@ class RepGeoErroresJob implements ShouldQueue
 
         RepGeoErrores::whereIn('rut', function ($query) use ($fecha) {
             $query->select('rut')
-                ->from('Geo_Trabajadores')
+                ->from('geo_trabajadores')
                 ->where('fin_contrato', '--')
                 ->where('enabled', 0)
                 ->where('fecha', $fecha)
@@ -109,6 +109,7 @@ class RepGeoErroresJob implements ShouldQueue
             ->where('sin_fin_contrato',NULL)
             ->where('sin_salida',NULL)
             ->delete();
+
 
     }
 }
