@@ -33,12 +33,12 @@ class RepGeoAsistenciaJob implements ShouldQueue
 
         $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
 
-        RepGeoAsistencia::truncate();
+        // RepGeoAsistencia::truncate();
 
        // $fechaAnt = Carbon::now()->subDays(7)->format('Y-m-d');
         $fechaAnt = '2024-02-01';
 
-       // DESCOMENTAR RepGeoAsistencia::where('fecha', '>=', $fechaAnt)->delete();
+        RepGeoAsistencia::where('fecha', '>=', $fechaAnt)->delete();
         //RepGeoAsistencia::truncate();
 
         ini_set('memory_limit', '512M');
