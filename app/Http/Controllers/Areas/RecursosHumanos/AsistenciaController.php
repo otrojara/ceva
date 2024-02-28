@@ -156,7 +156,7 @@ class AsistenciaController extends Controller
         'salidacount' => $salidacount,
         'fecha' => $fecha
         ]);
-        //return $pdf->download('invoice.pdf');
+        return $pdf->download('invoice.pdf');
 
 
         //$data["email"] = "djaramontenegro@gmail.com;djaramontenegro@ourlook.com";
@@ -170,10 +170,11 @@ class AsistenciaController extends Controller
 
         //Mail::to('djaramontenegro@gmail.com')->send(new AlertaGeoVictoria($data));
 
+        //////////////
        // Codigo, correcto, descomentar cuando se utilice la plataforma
-        foreach ($users  as $us) {
-            Mail::to($us->email)->send(new AlertaGeoVictoria($data));
-        }
+//        foreach ($users  as $us) {
+//            Mail::to($us->email)->send(new AlertaGeoVictoria($data));
+//        }
 
 
        // dd('Mail sent successfully');
