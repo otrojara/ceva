@@ -243,7 +243,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
 
         //        RepGeoAsistencia::where('presente',null)->update(['presente' => 0]);
         RepGeoAsistencia::where('no_presente',null)->update(['no_presente' => 0]);
-//        RepGeoAsistencia::where('libre',null)->update(['libre' => 0]);
+        RepGeoAsistencia::where('libre',null)->update(['libre' => 0]);
 //        RepGeoAsistencia::where('licencia',null)->update(['licencia' => 0]);
 //        RepGeoAsistencia::where('vacaciones',null)->update(['vacaciones' => 0]);
 //        RepGeoAsistencia::where('cumpleanio',null)->update(['cumpleanio' => 0]);

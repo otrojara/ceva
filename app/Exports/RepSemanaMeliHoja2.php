@@ -29,13 +29,18 @@ class RepSemanaMeliHoja2 implements FromCollection,WithHeadings
             'HORAS EXTRAS (EN MINUTOS)'
 
 
-        ]; 
+        ];
     }
 
     public function collection()
     {
         return  DB::table('rep_geoasistencia')
-        ->select( DB::raw("CONCAT(substr(RUT,1,CHARACTER_LENGTH(RUT)-1),'-',substr(RUT,-1)) AS RUT"),'NOMBRE','CARGO', 'TIPO_TURNO','BU', 'FECHA',DB::raw("CASE 
+        ->select( DB::raw("CONCAT(substr(RUT,1,CHARACTER_LENGTH(RUT)-1),'-',substr(RUT,-1)) AS RUT")
+            ,'NOMBRE',
+            'CARGO',
+            'TIPO_TURNO',
+            'BU',
+            'FECHA',DB::raw("CASE
                 WHEN PRESENTE = 1 AND LIBRE = 1 THEN 'Libre'
                 WHEN PRESENTE = 0 AND LIBRE = 1 THEN 'Libre'
                 WHEN PRESENTE = 1 AND LIBRE = 0 THEN 'Presente'
@@ -44,6 +49,6 @@ class RepSemanaMeliHoja2 implements FromCollection,WithHeadings
                 END AS ESTADO"),'HORAS_EXTRAS')
                 ->get();
 
-  
+
     }
 }

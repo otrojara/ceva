@@ -34,16 +34,16 @@ return [
     */
 
     'mailers' => [
-        'smtp' => [
-            'transport' => 'smtp',
-            'host' => 'mail.workflowsystem.cl',
-            'port' => 465,
-            'encryption' => 'ssl',
-            'username' => 'alerta@workflowsystem.cl',
-            'password' => 'Sistema2023.',
-            'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN'),
-        ],
+//        'smtp' => [
+//            'transport' => 'smtp',
+//            'host' => 'mail.workflowsystem.cl',
+//            'port' => 465,
+//            'encryption' => 'ssl',
+//            'username' => 'alerta@workflowsystem.cl',
+//            'password' => 'Sistema2023.',
+//            'timeout' => null,
+//            'local_domain' => env('MAIL_EHLO_DOMAIN'),
+//        ],
         'ses' => [
             'transport' => 'ses',
         ],
