@@ -62,7 +62,7 @@ class AsistenciaExportHoja1 implements FromCollection,WithHeadings
                 DB::raw(" SUM(HORAS_EXTRAS) AS HE "),
                 DB::raw(" SUM(HORAS_EXTRAS) / 60 "),
                 DB::raw(" SUM(ATRASO) AS ATR "))
-                ->whereBetween('REP.FECHA', ['2024-02-01', '2023-02-29'])
+                ->whereBetween('REP.FECHA', ['2024-02-01', '2024-02-29'])
                 ->groupBy('REP.RUT','REP.NOMBRE','REP.CARGO','REP.CATEGORIA','REP.EMPRESA','REP.TIPO_TURNO','REP.COD_BU','REP.BU','REP.INICIO_CONTRATO','REP.TERMINO_CONTRATO')
                 ->orderByRaw('REP.RUT DESC')
                 ->get();
