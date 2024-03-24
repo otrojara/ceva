@@ -16,7 +16,7 @@ class GeoAsistenciaCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'proceso:apdos';
+    protected $signature = 'proceso:bpdos';
 
     /**
      * The console command description.
@@ -30,7 +30,7 @@ class GeoAsistenciaCommand extends Command
      */
     public function handle()
     {
-        $fecha = Carbon::now()->subDays(14)->format('Y-m-d');
+        $fecha = Carbon::now()->subDays(7)->format('Y-m-d');
         GeoAsistencia::where('date', '>=', $fecha)->delete();
 
         $trabajadores = GeoTrabajadores::where('fecha', Carbon::parse(now())->toDateString())
