@@ -38,7 +38,12 @@ class RepGeoAsistenciaJob implements ShouldQueue
         $fechaAnt = Carbon::now()->subDays(7)->format('Y-m-d');
        // $fechaAnt = '2024-02-01';
 
-        RepGeoAsistencia::where('fecha', '>=', $fechaAnt)->delete();
+        //RepGeoAsistencia::where('fecha', '>=', $fechaAnt)->delete();
+
+        RepGeoAsistencia::where('fecha', '=', '2024-02-29')->delete();
+        $fecha = '2024-02-29';
+        $fechaAnt = '2024-02-29';
+
         //RepGeoAsistencia::truncate();
 
         ini_set('memory_limit', '512M');
