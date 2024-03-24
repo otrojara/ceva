@@ -30,8 +30,6 @@ class AsistenciaExportHoja1 implements FromCollection,WithHeadings
         'TIPO_TURNO',
         'BU',
         'CODIGO BU',
-        //'INICIO_CONTRATO',
-        //'TERMINO_CONTRATO',
         'DIAS_TRABAJADOS',
         'LIBRE',
         'LICENCIA',
@@ -52,7 +50,6 @@ class AsistenciaExportHoja1 implements FromCollection,WithHeadings
 
         return  DB::table('rep_geoasistencia as REP')
                 ->select('REP.RUT','REP.NOMBRE','REP.CARGO','REP.CATEGORIA','REP.EMPRESA','REP.TIPO_TURNO','REP.COD_BU','REP.BU',
-                    //'REP.INICIO_CONTRATO','REP.TERMINO_CONTRATO',
                 DB::raw(" SUM(PRESENTE) AS PRESENTE "),
                 DB::raw(" SUM(libre) AS libre "),
                 DB::raw(" SUM(licencia) AS licencia "),
@@ -65,7 +62,6 @@ class AsistenciaExportHoja1 implements FromCollection,WithHeadings
                 DB::raw(" SUM(ATRASO) AS ATR "))
                 ->whereBetween('REP.FECHA', ['2024-02-01', '2024-02-29'])
                 ->groupBy('REP.RUT','REP.NOMBRE','REP.CARGO','REP.CATEGORIA','REP.EMPRESA','REP.TIPO_TURNO','REP.COD_BU','REP.BU'
-                   // ,'REP.INICIO_CONTRATO','REP.TERMINO_CONTRATO'
                 )
                 ->orderByRaw('REP.RUT DESC')
                 ->get();
