@@ -92,6 +92,7 @@ class AsistenciaExportHoja2 implements FromCollection,WithHeadings
         'TO_END',
         'PRESENTE'
         )
+            ->whereBetween('FECHA', ['2024-02-01', '2023-02-29'])
         ->get();
     }
 }
