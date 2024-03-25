@@ -33,10 +33,11 @@ class RepGeoAsistenciaJob implements ShouldQueue
 
         $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
 
-        // RepGeoAsistencia::truncate();
+        $fecha = '2024-02-29';
+         RepGeoAsistencia::truncate();
 
-        $fechaAnt = Carbon::now()->subDays(54)->format('Y-m-d');
-       // $fechaAnt = '2024-02-01';
+        $fechaAnt = Carbon::now()->subDays(7)->format('Y-m-d');
+        $fechaAnt = '2024-02-01';
 
         RepGeoAsistencia::where('fecha', '>=', $fechaAnt)->delete();
 
@@ -58,7 +59,7 @@ class RepGeoAsistenciaJob implements ShouldQueue
             ) AS cal
             CROSS JOIN geo_trabajadores AS tr
             LEFT JOIN geo_asistencia AS asi ON asi.rut = tr.rut AND asi.date = cal.fecha
-            WHERE tr.fecha = ? ",[$fechaAnt,$fecha,$fecha]);
+            WHERE tr.fecha = ? ",[$fechaAnt,$fecha,'2024-03-25']);
 
 
 
