@@ -19,7 +19,7 @@ class RepGeoAsistenciaCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'proceso:ddtres';
+    protected $signature = 'proceso:cevarepmar';
 
     /**
      * The console command description.
